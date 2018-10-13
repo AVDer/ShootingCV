@@ -21,6 +21,8 @@ class Target {
   void print_points();
   void add_markers();
 
+  cv::Mat grey_frame() const { return grey_; }
+
  private:
   static const uchar kBlackThreshold{128};
   static const uchar kWhiteThreshold{128};

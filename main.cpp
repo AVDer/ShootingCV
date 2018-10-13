@@ -31,19 +31,23 @@ int main(int /*argc*/, char** /*argv*/) {
   cv::Mat input_video_frame;
 
   Target target;
-  target.set_description({ColorChange::BlackWhite, 10, ColorChange::WhiteBlack, 9,
-                          ColorChange::BlackWhite, 8,  ColorChange::WhiteBlack, 7,
-                          ColorChange::BlackWhite, 6,  ColorChange::WhiteBlack, 5,
-                          ColorChange::BlackWhite, 4,  ColorChange::WhiteBlack, 3,
-                          ColorChange::BlackWhite, 2,  ColorChange::WhiteBlack, 1});
+  target.set_description(
+      {ColorChange::BlackWhite, 10, ColorChange::WhiteBlack, 9, ColorChange::BlackWhite, 8,
+       ColorChange::WhiteBlack, 7,  ColorChange::BlackWhite, 6, ColorChange::WhiteBlack, 5,
+       ColorChange::BlackWhite, 4,  ColorChange::WhiteBlack, 3, ColorChange::BlackWhite, 2,
+       ColorChange::WhiteBlack, 1,  ColorChange::Finish});
 
   while (true) {
     input_video >> input_video_frame;
     target.set(input_video_frame);
-    target.find_points();
-    target.add_markers();
+    if (target.find_center() != ShootError::NoError) {
+      printf("Center find error\n");
+    }
+    //target.find_points();
+    //target.add_markers();
 
     cv::imshow(kInputWindow, input_video_frame);
+    //cv::imshow(kInputWindow, target.grey_frame());
     if (cv::waitKey(1000 / fps) >= 0) break;
 
     // cv::imwrite("result.png", original_image);
