@@ -59,6 +59,11 @@ ShootError Target::find_center() {
         yu = height_ / 2 - c;
       }
     }
+
+    if (!xr || !xl || !yd || !yu) {
+      return ShootError::UnexpectedImage;
+    }
+
     center_.x = (xl + xr) / 2;
     center_.y = (yu + yd) / 2;
   }
@@ -77,12 +82,11 @@ ShootError Target::find_points() {
 
   for (size_t r{0}; r < height_ / 2; ++r) {
     bool found{false};
-    uchar value = grey_.at<uchar>(width_ / 2 + r, height_ / 2 + r);
+    uchar value = grey_.at<uchar>(center_.y + r, center_.x + r);
 
     if (is_white && value < kBlackThreshold) {
       is_white = false;
       if (target_description_[target_index] != ColorChange::WhiteBlack) {
-        //printf("Recognition error\n");
         return ShootError::UnexpectedImage;
       }
       found = true;
@@ -91,22 +95,19 @@ ShootError Target::find_points() {
     if (!is_white && value > kWhiteThreshold) {
       is_white = true;
       if (target_description_[target_index] != ColorChange::BlackWhite) {
-        //printf("Recognition error\n");
         return ShootError::UnexpectedImage;
       }
       found = true;
     }
 
     if (found) {
-      cv::circle(original_, cv::Point(width_ / 2 + r, height_ / 2 + r), 1, cv::Scalar(255, 0, 0), 2);
+      cv::circle(original_, cv::Point(center_.x + r, center_.y + r), 1, cv::Scalar(255, 0, 0), 2);
     }
 
     if (found && target_description_[++target_index] < ColorChange::Start) {
-      //auto tv = c - width_ / 2;
       auto radius = sqrt(r * r + r * r);
       target_points_[target_description_[target_index]] = static_cast<size_t>(radius);
       if (target_description_[++target_index] == ColorChange::Finish) {
-        printf("Done!!!\n");
         break;
       }
     }
@@ -123,20 +124,18 @@ void Target::print_points() {
 }
 
 void Target::add_markers() {
-  cv::circle(original_, cv::Point(width_ / 2, height_ / 2), 1, cv::Scalar(0, 0, 255), 3);
   for (const auto& t : target_points_) {
     auto point = t.first;
     auto radius = t.second;
-    cv::circle(original_, cv::Point(width_ / 2, height_ / 2), radius, cv::Scalar(0, 255, 0), 1);
+    cv::circle(original_, cv::Point(center_), radius, cv::Scalar(0, 255, 0), 1);
     auto font = cv::HersheyFonts::FONT_HERSHEY_SIMPLEX;
     int base_line;
-    cv::Size text_size = cv::getTextSize(std::to_string(point), font, 1, 3, &base_line);
+    cv::Size text_size = cv::getTextSize(std::to_string(point), font, 1, 1, &base_line);
     
     cv::putText(
         original_, std::to_string(point),
-        cv::Point(width_ / 2 + radius - text_size.width, height_ / 2 + text_size.height / 2), font,
+        cv::Point(center_.x + radius - text_size.width, center_.y + text_size.height / 2), font,
         1, cv::Scalar(0, 255, 0), 3);
         
   }
-  //cv::imwrite("marker_" + original_name_, original_);
 }
