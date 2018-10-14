@@ -25,7 +25,6 @@ OpenCVHandler::~OpenCVHandler()
 
 void OpenCVHandler::initialize()
 {
-    cv::Mat input_video_frame;
     Target target;
     target.set_description(
         {ColorChange::BlackWhite, 10, ColorChange::WhiteBlack, 9, ColorChange::BlackWhite, 8,
@@ -34,6 +33,8 @@ void OpenCVHandler::initialize()
          //ColorChange::WhiteBlack, 1,
          ColorChange::Finish});
 
+
+    cv::Mat input_video_frame;
     /*
     while (true) {
       input_video >> input_video_frame;
@@ -55,4 +56,11 @@ void OpenCVHandler::initialize()
       // cv::imwrite("result.png", original_image);
     }
     */
+}
+
+cv::Mat OpenCVHandler::get_frame()
+{
+    cv::Mat input_video_frame;
+    (*input_video) >> input_video_frame;
+    return input_video_frame;
 }

@@ -15,6 +15,7 @@ public:
     ~OpenCVHandler();
 
     void initialize();
+    cv::Mat get_frame();
 
 private:
     std::unique_ptr<cv::VideoCapture> input_video;

@@ -12,8 +12,18 @@ Rectangle {
         text: qsTr("Hello from QML")
     }
 
-    Image {
+    MouseArea {
         anchors.fill: parent
+        onClicked: frameImage.imageClick()
+    }
+
+    Image {
+        signal imageClick()
+        //anchors.fill: parent
+
+        width: 200
+        height: 100
+
         id: frameImage
         objectName: "frameImage"
     }
