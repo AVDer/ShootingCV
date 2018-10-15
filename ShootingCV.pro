@@ -19,7 +19,8 @@ SOURCES += \
         main.cpp \
     mainscreen.cpp \
     opencvhandler.cpp \
-    target.cpp
+    target.cpp \
+    targetimageprovider.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,6 +38,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     mainscreen.h \
     opencvhandler.h \
-    target.h
+    target.h \
+    targetimageprovider.h
 
 DISTFILES +=

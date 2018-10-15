@@ -32,8 +32,8 @@ class Target {
   cv::Mat original_;
   cv::Mat grey_;
   cv::Point center_;
-  size_t width_;
-  size_t height_;
+  int width_;
+  int height_;
   std::vector<uint16_t> target_description_;
-  std::map<uint16_t, size_t> target_points_;
+  std::map<uint16_t, int> target_points_;
 };

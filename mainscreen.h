@@ -1,23 +1,24 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QQuickView>
 #include <QQuickItem>
+#include <QQuickView>
 
 #include <opencvhandler.h>
+#include <targetimageprovider.h>
 
-class MainScreen : public QQuickView
-{
-    Q_OBJECT
-public:
-    MainScreen();
+class MainScreen : public QQuickView {
+  Q_OBJECT
+ public:
+  MainScreen();
 
-private:
-    QObject * frameImage;
-    std::unique_ptr<OpenCVHandler> input_device;
+ private:
+  QObject* frameImage;
+  std::unique_ptr<OpenCVHandler> input_device;
+  std::unique_ptr<TargetImageProvider> target_provider;
 
-public slots:
-    void someSlot();
+ public slots:
+  void someSlot();
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

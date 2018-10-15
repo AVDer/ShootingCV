@@ -1,16 +1,10 @@
 import QtQuick 2.10
-import QtQuick.Window 2.10
 
 Rectangle {
-    //anchors.fill: parent
+    anchors.fill: parent
 
-    width: 200
-    height: 100
-
-    Text {
-        id: someText
-        text: qsTr("Hello from QML")
-    }
+    //width: 200
+    //height: 100
 
     MouseArea {
         anchors.fill: parent
@@ -19,11 +13,8 @@ Rectangle {
 
     Image {
         signal imageClick()
-        //anchors.fill: parent
-
-        width: 200
-        height: 100
-
+        anchors.fill: parent
+        cache: false
         id: frameImage
         objectName: "frameImage"
     }
