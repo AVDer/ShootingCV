@@ -3,11 +3,16 @@
 
 #include <QQuickImageProvider>
 
+#include <memory>
 #include <opencv2/opencv.hpp>
+
+#include <opencv_interface.h>
 
 class TargetImageProvider : public QQuickImageProvider {
  public:
   TargetImageProvider();
+
+  void setOpenCVInterface(std::shared_ptr<OpenCVInterface> interface);
 
   void newOpenCVFrame(cv::Mat frame);
 
@@ -15,6 +20,7 @@ class TargetImageProvider : public QQuickImageProvider {
                       const QSize& /*requestedSize*/) override;
 
  private:
+  static std::shared_ptr<OpenCVInterface> interface_;
   static QImage image_;
 };
 

@@ -13,9 +13,9 @@ class MainScreen : public QQuickView {
   MainScreen();
 
  private:
-  QObject* frameImage;
-  std::unique_ptr<OpenCVHandler> input_device;
-  std::unique_ptr<TargetImageProvider> target_provider;
+  QObject* frameImage_;
+  std::shared_ptr<OpenCVInterface> input_device_;
+  std::unique_ptr<TargetImageProvider> target_provider_;
 
  public slots:
   void someSlot();

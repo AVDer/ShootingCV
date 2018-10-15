@@ -11,15 +11,15 @@
 
 #include "target.h"
 
-OpenCVHandler::OpenCVHandler() : input_video(new cv::VideoCapture(0)) {
-  if (!input_video->isOpened()) {
+OpenCVInterface::OpenCVInterface() : input_video_(new cv::VideoCapture(0)) {
+  if (!input_video_->isOpened()) {
     printf("Can't open video\n");
   }
 }
 
-OpenCVHandler::~OpenCVHandler() { input_video.release(); }
+OpenCVInterface::~OpenCVInterface() { input_video_->release(); }
 
-void OpenCVHandler::initialize() {
+void OpenCVInterface::initialize() {
   Target target;
   target.set_description(
       {ColorChange::BlackWhite, 10, ColorChange::WhiteBlack, 9, ColorChange::BlackWhite, 8,
@@ -28,7 +28,6 @@ void OpenCVHandler::initialize() {
        // ColorChange::WhiteBlack, 1,
        ColorChange::Finish});
 
-  cv::Mat input_video_frame;
   /*
   while (true) {
     input_video >> input_video_frame;
@@ -52,14 +51,13 @@ void OpenCVHandler::initialize() {
   */
 }
 
-cv::Mat OpenCVHandler::get_frame() {
-  cv::Mat input_video_frame;
-  (*input_video) >> input_video_frame;
-  return input_video_frame;
+cv::Mat OpenCVInterface::get_frame() {
+  (*input_video_) >> input_video_frame_;
+  return input_video_frame_;
 }
 
-cv::Mat &OpenCVHandler::get_sample_frame() {
-  sample_frame_ = cv::Mat(800, 600, CV_8UC3);
-  cv::randu(sample_frame_, cv::Scalar::all(0), cv::Scalar::all(255));
-  return sample_frame_;
+cv::Mat OpenCVInterface::get_sample_frame() {
+  cv::Mat sample_frame = cv::Mat(800, 600, CV_8UC3);
+  cv::randu(sample_frame, cv::Scalar::all(0), cv::Scalar::all(255));
+  return sample_frame;
 }

@@ -3,25 +3,22 @@
 #include "target_image_provider.h"
 
 MainScreen::MainScreen()
-    : input_device(new OpenCVHandler), target_provider(new TargetImageProvider()) {
+    : input_device_(new OpenCVInterface), target_provider_(new TargetImageProvider()) {
+  target_provider_->setOpenCVInterface(input_device_);
+
   setSource(QUrl(QStringLiteral("qrc:/main.qml")));
 
   QObject *qmlRoot = rootObject();
   QQmlEngine *engine = this->engine();
   engine->addImageProvider(QLatin1String("target"), new TargetImageProvider);
 
-  frameImage = qmlRoot->findChild<QObject *>("frameImage");
-  if (frameImage) {
-    connect(frameImage, SIGNAL(imageClick()), this, SLOT(someSlot()));
+  frameImage_ = qmlRoot->findChild<QObject *>("frameImage");
+  if (frameImage_) {
+    connect(frameImage_, SIGNAL(imageClick()), this, SLOT(someSlot()));
   }
 }
 
 void MainScreen::someSlot() {
-  // auto image = input_device->get_frame();
-  auto image = input_device->get_sample_frame();
-  frameImage->setProperty("width", image.cols);
-  frameImage->setProperty("height", image.rows);
-  target_provider->newOpenCVFrame(image);
-  frameImage->setProperty("source", "");
-  frameImage->setProperty("source", "image://target/target");
+  frameImage_->setProperty("source", "");
+  frameImage_->setProperty("source", "image://target/sample");
 }
