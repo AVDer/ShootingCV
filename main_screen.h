@@ -4,8 +4,8 @@
 #include <QQuickItem>
 #include <QQuickView>
 
-#include <opencvhandler.h>
-#include <targetimageprovider.h>
+#include <opencv_interface.h>
+#include <target_image_provider.h>
 
 class MainScreen : public QQuickView {
   Q_OBJECT

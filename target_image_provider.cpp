@@ -1,4 +1,4 @@
-#include "targetimageprovider.h"
+#include "target_image_provider.h"
 
 TargetImageProvider::TargetImageProvider() : QQuickImageProvider(QQuickImageProvider::Image) {}
 

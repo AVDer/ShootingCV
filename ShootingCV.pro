@@ -17,10 +17,10 @@ PKGCONFIG += opencv
 
 SOURCES += \
         main.cpp \
-    mainscreen.cpp \
-    opencvhandler.cpp \
     target.cpp \
-    targetimageprovider.cpp
+    main_screen.cpp \
+    opencv_interface.cpp \
+    target_image_provider.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,9 +36,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    mainscreen.h \
-    opencvhandler.h \
     target.h \
-    targetimageprovider.h
+    opencv_interface.h \
+    main_screen.h \
+    target_image_provider.h
 
 DISTFILES +=

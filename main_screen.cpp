@@ -1,6 +1,6 @@
-#include "mainscreen.h"
+#include "main_screen.h"
 
-#include "targetimageprovider.h"
+#include "target_image_provider.h"
 
 MainScreen::MainScreen()
     : input_device(new OpenCVHandler), target_provider(new TargetImageProvider()) {
