@@ -115,9 +115,11 @@ ShootError Target::find_points() {
 }
 
 void Target::print_points() {
+    /*
   for (const auto& [point, radius] : target_points_) {
     std::cout << point << "\t=>\t" << radius << std::endl;
   }
+  */
 }
 
 void Target::add_markers() {

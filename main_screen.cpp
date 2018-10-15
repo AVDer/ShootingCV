@@ -25,5 +25,5 @@ MainScreen::MainScreen()
 
 void MainScreen::someSlot() {
   frameImage_->setProperty("source", "");
-  frameImage_->setProperty("currentImage", "image://target/sample");
+  frameImage_->setProperty("currentImage", "image://target/target");
 }

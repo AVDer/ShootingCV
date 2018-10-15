@@ -24,6 +24,16 @@ QImage TargetImageProvider::requestImage(const QString &id, QSize *size,
                          requestedSize.height() > 0 ? requestedSize.height() : image_.height(),
                          Qt::AspectRatioMode::KeepAspectRatio);
   }
+  else if (id == "target") {
+      auto frame = interface_->get_frame();
+      image_ = QImage(static_cast<const unsigned char *>(frame.data), frame.cols, frame.rows,
+                      QImage::Format_RGB888)
+                   .rgbSwapped();
+      if (size) *size = image_.size();
+      return image_.scaled(requestedSize.width() > 0 ? requestedSize.width() : image_.width(),
+                           requestedSize.height() > 0 ? requestedSize.height() : image_.height(),
+                           Qt::AspectRatioMode::KeepAspectRatio);
+    }
   return QImage();
 }
 
