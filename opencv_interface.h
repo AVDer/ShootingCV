@@ -6,9 +6,10 @@
 class OpenCVInterface {
  public:
   enum hue_color { green = 60, blue = 120, yellow = 30, red = 180 };
-  const uchar kBlackThreshold{50};
-  const uchar kWhiteThreshold{200};
-  const double kFPS{30};
+  static const uchar kBlackThreshold{50};
+  static const uchar kWhiteThreshold{200};
+  static const int kFPS{30};
+  static constexpr int kUpdatePeriod{1000 / kFPS};
 
   OpenCVInterface();
   ~OpenCVInterface();

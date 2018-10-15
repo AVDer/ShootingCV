@@ -16,9 +16,14 @@ MainScreen::MainScreen()
   if (frameImage_) {
     connect(frameImage_, SIGNAL(imageClick()), this, SLOT(someSlot()));
   }
+
+  auto imageTimer = qmlRoot->findChild<QObject *>("imageTimer");
+  if (imageTimer) {
+    imageTimer->setProperty("interval", input_device_->kUpdatePeriod);
+  }
 }
 
 void MainScreen::someSlot() {
   frameImage_->setProperty("source", "");
-  frameImage_->setProperty("source", "image://target/sample");
+  frameImage_->setProperty("currentImage", "image://target/sample");
 }

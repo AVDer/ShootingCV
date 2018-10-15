@@ -11,11 +11,24 @@ Rectangle {
         onClicked: frameImage.imageClick()
     }
 
+    Timer {
+        objectName: "imageTimer"
+        repeat: true
+        running: true
+        onTriggered: {
+            frameImage.source = ""
+            frameImage.source = frameImage.currentImage
+        }
+    }
+
     Image {
         signal imageClick()
+
         anchors.fill: parent
         cache: false
         id: frameImage
         objectName: "frameImage"
+
+        property string currentImage : "image://target/sample"
     }
 }
