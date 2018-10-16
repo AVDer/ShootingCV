@@ -3,8 +3,11 @@
 #include "target_image_provider.h"
 
 MainScreen::MainScreen()
-    : input_device_(new OpenCVInterface), target_provider_(new TargetImageProvider()) {
+    : input_device_(new OpenCVInterface),
+      target_provider_(new TargetImageProvider()) {
   target_provider_->setOpenCVInterface(input_device_);
+
+  input_device_->initialize();
 
   setSource(QUrl(QStringLiteral("qrc:/main.qml")));
 

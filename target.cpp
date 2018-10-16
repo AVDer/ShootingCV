@@ -2,24 +2,25 @@
 
 ShootError Target::load(const std::string& filename) {
   original_name_ = filename;
-  original_ = cv::imread(filename, cv::ImreadModes::IMREAD_COLOR);
-  if (original_.empty()) {
+  marked_ = cv::imread(filename, cv::ImreadModes::IMREAD_COLOR);
+  if (marked_.empty()) {
     std::cerr << "No image data!" << std::endl;
     return ShootError::NotFound;
   } else {
-    width_ = original_.cols;
-    height_ = original_.rows;
+    width_ = marked_.cols;
+    height_ = marked_.rows;
     printf("Image size: x: %d, y: %d\n", width_, height_);
   }
-  cv::cvtColor(original_, grey_, CV_BGR2GRAY);
+  cv::cvtColor(marked_, grey_, CV_BGR2GRAY);
   return ShootError::NoError;
 }
 
 ShootError Target::set(cv::Mat& frame) {
-  original_ = frame;
-  width_ = original_.cols;
-  height_ = original_.rows;
-  cv::cvtColor(original_, grey_, CV_BGR2GRAY);
+  original_ = frame.clone();
+  marked_ = frame;
+  width_ = marked_.cols;
+  height_ = marked_.rows;
+  cv::cvtColor(marked_, grey_, CV_BGR2GRAY);
   return ShootError::NoError;
 }
 
@@ -37,10 +38,14 @@ ShootError Target::find_center() {
     for (int c{0}; c < width_ / 2; ++c) {
       // Print center search cross
 
-      // if (!xr) cv::circle(original_, cv::Point(width_ / 2 + c, height_ / 2), 1, cv::Scalar(255,
-      // 0, 0)); if (!xl) cv::circle(original_, cv::Point(width_ / 2 - c, height_ / 2), 1,
-      // cv::Scalar(255, 0, 0)); if (!yd) cv::circle(original_, cv::Point(width_ / 2, height_ / 2 +
-      // c), 1, cv::Scalar(255, 0, 0)); if (!yu) cv::circle(original_, cv::Point(width_ / 2, height_
+      // if (!xr) cv::circle(original_, cv::Point(width_ / 2 + c, height_ / 2),
+      // 1, cv::Scalar(255,
+      // 0, 0)); if (!xl) cv::circle(original_, cv::Point(width_ / 2 - c,
+      // height_ / 2), 1,
+      // cv::Scalar(255, 0, 0)); if (!yd) cv::circle(original_, cv::Point(width_
+      // / 2, height_ / 2 +
+      // c), 1, cv::Scalar(255, 0, 0)); if (!yu) cv::circle(original_,
+      // cv::Point(width_ / 2, height_
       // / 2 - c), 1, cv::Scalar(255, 0, 0));
 
       // Actual search
@@ -69,8 +74,9 @@ ShootError Target::find_center() {
 
   // Center marker
 
-  cv::circle(original_, cv::Point(center_), 1, cv::Scalar(255, 255, 0), 3);
-  // cv::circle(original_, cv::Point(width_ / 2, height_ / 2), 1, cv::Scalar(0, 0, 255), 3);
+  cv::circle(marked_, cv::Point(center_), 1, cv::Scalar(255, 255, 0), 3);
+  // cv::circle(original_, cv::Point(width_ / 2, height_ / 2), 1, cv::Scalar(0,
+  // 0, 255), 3);
 
   return ShootError::NoError;
 }
@@ -100,12 +106,14 @@ ShootError Target::find_points() {
     }
 
     if (found) {
-      cv::circle(original_, cv::Point(center_.x + r, center_.y + r), 1, cv::Scalar(255, 0, 0), 2);
+      cv::circle(marked_, cv::Point(center_.x + r, center_.y + r), 1,
+                 cv::Scalar(255, 0, 0), 2);
     }
 
     if (found && target_description_[++target_index] < ColorChange::Start) {
       auto radius = sqrt(r * r + r * r);
-      target_points_[target_description_[target_index]] = static_cast<int>(radius);
+      target_points_[target_description_[target_index]] =
+          static_cast<int>(radius);
       if (target_description_[++target_index] == ColorChange::Finish) {
         break;
       }
@@ -115,24 +123,26 @@ ShootError Target::find_points() {
 }
 
 void Target::print_points() {
-    /*
-  for (const auto& [point, radius] : target_points_) {
-    std::cout << point << "\t=>\t" << radius << std::endl;
-  }
-  */
+  /*
+for (const auto& [point, radius] : target_points_) {
+  std::cout << point << "\t=>\t" << radius << std::endl;
+}
+*/
 }
 
 void Target::add_markers() {
   for (const auto& t : target_points_) {
     auto point = t.first;
     auto radius = t.second;
-    cv::circle(original_, cv::Point(center_), radius, cv::Scalar(0, 255, 0), 1);
+    cv::circle(marked_, cv::Point(center_), radius, cv::Scalar(0, 255, 0), 1);
     auto font = cv::HersheyFonts::FONT_HERSHEY_SIMPLEX;
     int base_line;
-    cv::Size text_size = cv::getTextSize(std::to_string(point), font, 1, 1, &base_line);
+    cv::Size text_size =
+        cv::getTextSize(std::to_string(point), font, 1, 1, &base_line);
 
-    cv::putText(original_, std::to_string(point),
-                cv::Point(center_.x + radius - text_size.width, center_.y + text_size.height / 2),
+    cv::putText(marked_, std::to_string(point),
+                cv::Point(center_.x + radius - text_size.width,
+                          center_.y + text_size.height / 2),
                 font, 1, cv::Scalar(0, 255, 0), 3);
   }
 }

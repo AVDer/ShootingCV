@@ -14,12 +14,22 @@ ListModel {
 
     ListElement {
         sourceName: "Original"
-        sourceURL: "image://target/target"
+        sourceURL: "image://target/original"
     }
 
     ListElement {
         sourceName: "Grey"
-        sourceURL: "image://target/target"
+        sourceURL: "image://target/grey"
+    }
+
+    ListElement {
+        sourceName: "Marked"
+        sourceURL: "image://target/marked"
+    }
+
+    ListElement {
+        sourceName: "Model"
+        sourceURL: "image://target/model"
     }
 
 }

@@ -3,6 +3,8 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "target.h"
+
 class OpenCVInterface {
  public:
   enum hue_color { green = 60, blue = 120, yellow = 30, red = 180 };
@@ -15,12 +17,17 @@ class OpenCVInterface {
   ~OpenCVInterface();
 
   void initialize();
-  cv::Mat get_frame();
+  cv::Mat get_original_frame();
+  cv::Mat get_marked_frame();
+  cv::Mat get_grey_frame();
   cv::Mat get_sample_frame();
 
  private:
   std::unique_ptr<cv::VideoCapture> input_video_;
+  std::unique_ptr<Target> target_;
   cv::Mat input_video_frame_;
+
+  void processFrame();
 };
 
 #endif

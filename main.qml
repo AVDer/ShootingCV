@@ -30,6 +30,7 @@ RowLayout {
 
                 anchors.fill: parent
                 cache: false
+                fillMode: Image.PreserveAspectFit
                 id: frameImage
                 objectName: "frameImage"
 
@@ -53,20 +54,24 @@ RowLayout {
 
     }
 
-    GroupBox {
-        title: "Frame source"
-        ExclusiveGroup { id: frameSourceGroup }
-        Layout.fillHeight: true
+    ColumnLayout {
 
-        ListView {
+        GroupBox {
+            title: "Frame source"
+            ExclusiveGroup { id: frameSourceGroup }
             Layout.fillHeight: true
-            orientation: ListView.Vertical
-            model: FrameSourceModel{}
-            delegate: RadioButton {
-                text: sourceName
-                exclusiveGroup: frameSourceGroup
-                onClicked: frameImage.currentImage = sourceURL
+
+            ListView {
+                height: parent.height
+                orientation: ListView.Vertical
+                model: FrameSourceModel{}
+                delegate: RadioButton {
+                    text: sourceName
+                    exclusiveGroup: frameSourceGroup
+                    onClicked: frameImage.currentImage = sourceURL
+                }
             }
+
         }
 
     }

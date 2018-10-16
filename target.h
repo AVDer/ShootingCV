@@ -21,7 +21,9 @@ class Target {
   void print_points();
   void add_markers();
 
+  cv::Mat original_frame() const { return original_; }
   cv::Mat grey_frame() const { return grey_; }
+  cv::Mat marked_frame() const { return marked_; }
 
  private:
   static const uchar kBlackThreshold{128};
@@ -31,6 +33,8 @@ class Target {
   std::string original_name_;
   cv::Mat original_;
   cv::Mat grey_;
+  cv::Mat marked_;
+  cv::Mat model_;
   cv::Point center_;
   int width_;
   int height_;
