@@ -37,36 +37,17 @@ RowLayout {
             }
         }
 
-        Row {
-
+        ListView {
             id: logosRow
             readonly property int kLogoSize: 50
-
-            Image {
+            height: kLogoSize
+            Layout.fillWidth: true
+            orientation: ListView.Horizontal
+            model: LogosModel{}
+            delegate: Image {
                 width: logosRow.kLogoSize
                 height: logosRow.kLogoSize
-                //anchors.bottom: parent.bottom
-                source: "qrc:/logos/logo_c++.png"
-            }
-            Image {
-                width: logosRow.kLogoSize
-                height: logosRow.kLogoSize
-                source: "qrc:/logos/logo_qt.png"
-            }
-            Image {
-                width: logosRow.kLogoSize
-                height: logosRow.kLogoSize
-                source: "qrc:/logos/logo_qml.png"
-            }
-            Image {
-                width: logosRow.kLogoSize
-                height: logosRow.kLogoSize
-                source: "qrc:/logos/logo_opencv.png"
-            }
-            Image {
-                width: logosRow.kLogoSize
-                height: logosRow.kLogoSize
-                source: "qrc:/logos/logo_js.png"
+                source: logo
             }
         }
 
@@ -74,42 +55,20 @@ RowLayout {
 
     GroupBox {
         title: "Frame source"
+        ExclusiveGroup { id: frameSourceGroup }
+        Layout.fillHeight: true
 
-        ColumnLayout {
-            ExclusiveGroup { id: frameSourceGroup }
-            RadioButton {
-                text: "Off"
-                checked: true
+        ListView {
+            Layout.fillHeight: true
+            orientation: ListView.Vertical
+            model: FrameSourceModel{}
+            delegate: RadioButton {
+                text: sourceName
                 exclusiveGroup: frameSourceGroup
-                onClicked:{
-                    if(checked){
-                        frameImage.currentImage = ""
-                    }
-                }
-            }
-            RadioButton {
-                text: "Sample"
-                exclusiveGroup: frameSourceGroup
-                onClicked:{
-                    if(checked){
-                        frameImage.currentImage = "image://target/sample"
-                    }
-                }
-            }
-            RadioButton {
-                text: "Original"
-                exclusiveGroup: frameSourceGroup
-                onClicked:{
-                    if(checked){
-                        frameImage.currentImage = "image://target/target"
-                    }
-                }
-            }
-            RadioButton {
-                text: "Grey"
-                exclusiveGroup: frameSourceGroup
+                onClicked: frameImage.currentImage = sourceURL
             }
         }
+
     }
 
 }
