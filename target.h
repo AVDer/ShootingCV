@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -8,6 +9,20 @@
 #include "global.h"
 
 enum ColorChange : uint16_t { Start = 100, BlackWhite, WhiteBlack, Finish };
+
+const std::array<cv::Scalar, 11> kPointsColors = {
+    cv::Scalar(255, 255, 255),  // 0
+    cv::Scalar(255, 255, 255),  // 1
+    cv::Scalar(255, 255, 255),  // 2
+    cv::Scalar(255, 255, 255),  // 3
+    cv::Scalar(255, 255, 255),  // 4
+    cv::Scalar(255, 255, 255),  // 5
+    cv::Scalar(255, 255, 255),  // 6
+    cv::Scalar(255, 255, 255),  // 7
+    cv::Scalar(0, 255, 255),    // 8
+    cv::Scalar(0, 128, 255),    // 9
+    cv::Scalar(0, 0, 255)       // 10
+};
 
 class Target {
  public:
@@ -20,10 +35,12 @@ class Target {
   [[nodiscard]] ShootError find_center();
   void print_points();
   void add_markers();
+  void create_model();
 
   cv::Mat original_frame() const { return original_; }
   cv::Mat grey_frame() const { return grey_; }
   cv::Mat marked_frame() const { return marked_; }
+  cv::Mat model_frame() const { return model_; }
 
  private:
   static const uchar kBlackThreshold{128};

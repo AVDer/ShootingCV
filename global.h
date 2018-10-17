@@ -3,5 +3,7 @@
 enum class ShootError {
     NoError,
     NotFound,
-    UnexpectedImage
+    UnexpectedImage,
+    Process,
+    Initialization
 };

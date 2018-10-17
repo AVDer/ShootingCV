@@ -27,6 +27,8 @@ QImage TargetImageProvider::requestImage(const QString &id, QSize *size,
   } else if (id == "grey") {
     frame = interface_->get_grey_frame();
     format = QImage::Format_Grayscale8;
+  } else if (id == "model") {
+    frame = interface_->get_model_frame();
   } else {
     return QImage();
   }

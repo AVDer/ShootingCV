@@ -20,14 +20,16 @@ class OpenCVInterface {
   cv::Mat get_original_frame();
   cv::Mat get_marked_frame();
   cv::Mat get_grey_frame();
+  cv::Mat get_model_frame();
   cv::Mat get_sample_frame();
 
  private:
+  bool is_initialized_{false};
   std::unique_ptr<cv::VideoCapture> input_video_;
   std::unique_ptr<Target> target_;
   cv::Mat input_video_frame_;
 
-  void processFrame();
+  ShootError processFrame();
 };
 
 #endif
