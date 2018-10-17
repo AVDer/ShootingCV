@@ -75,5 +75,6 @@ ShootError OpenCVInterface::processFrame() {
     return ShootError::Process;
   }
   target_->add_markers();
+  target_->create_model();
   return ShootError::NoError;
 }

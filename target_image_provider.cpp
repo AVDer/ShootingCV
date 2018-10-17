@@ -36,6 +36,7 @@ QImage TargetImageProvider::requestImage(const QString &id, QSize *size,
                   frame.rows, format)
                .rgbSwapped();
   if (size) *size = image_.size();
+
   return image_.scaled(
       requestedSize.width() > 0 ? requestedSize.width() : image_.width(),
       requestedSize.height() > 0 ? requestedSize.height() : image_.height(),

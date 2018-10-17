@@ -10,18 +10,18 @@
 
 enum ColorChange : uint16_t { Start = 100, BlackWhite, WhiteBlack, Finish };
 
-const std::array<cv::Scalar, 11> kPointsColors = {
-    cv::Scalar(255, 255, 255),  // 0
-    cv::Scalar(255, 255, 255),  // 1
-    cv::Scalar(255, 255, 255),  // 2
-    cv::Scalar(255, 255, 255),  // 3
-    cv::Scalar(255, 255, 255),  // 4
-    cv::Scalar(255, 255, 255),  // 5
-    cv::Scalar(255, 255, 255),  // 6
-    cv::Scalar(255, 255, 255),  // 7
-    cv::Scalar(0, 255, 255),    // 8
-    cv::Scalar(0, 128, 255),    // 9
-    cv::Scalar(0, 0, 255)       // 10
+const std::array<std::pair<cv::Scalar, cv::Scalar>, 11> kPointsColors = {
+    std::make_pair(cv::Scalar(255, 255, 255), cv::Scalar(255, 255, 255)),  // 0
+    std::make_pair(cv::Scalar(255, 255, 255), cv::Scalar(0, 0, 0)),        // 1
+    std::make_pair(cv::Scalar(255, 255, 255), cv::Scalar(0, 0, 0)),        // 2
+    std::make_pair(cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 255)),        // 3
+    std::make_pair(cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 255)),        // 4
+    std::make_pair(cv::Scalar(255, 255, 0), cv::Scalar(0, 0, 0)),          // 5
+    std::make_pair(cv::Scalar(255, 255, 0), cv::Scalar(0, 0, 0)),          // 6
+    std::make_pair(cv::Scalar(0, 0, 255), cv::Scalar(0, 0, 0)),            // 7
+    std::make_pair(cv::Scalar(0, 0, 255), cv::Scalar(0, 0, 0)),            // 8
+    std::make_pair(cv::Scalar(0, 255, 255), cv::Scalar(0, 0, 0)),          // 9
+    std::make_pair(cv::Scalar(0, 255, 255), cv::Scalar(0, 0, 0))           // 10
 };
 
 class Target {

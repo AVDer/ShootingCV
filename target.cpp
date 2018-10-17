@@ -145,4 +145,19 @@ void Target::add_markers() {
   }
 }
 
-void Target::create_model() {}
+void Target::create_model() {
+  model_ = original_.clone();
+  auto font = cv::HersheyFonts::FONT_HERSHEY_SIMPLEX;
+  for (uint16_t i = 0; i <= 10; ++i) {
+    cv::circle(model_, center_, target_points_[i], kPointsColors[i].first, -1);
+    cv::circle(model_, center_, target_points_[i], kPointsColors[i].second, 1);
+    int base_line;
+    cv::Size text_size =
+        cv::getTextSize(std::to_string(i), font, 1, 1, &base_line);
+
+    cv::putText(model_, std::to_string(i),
+                cv::Point(center_.x + target_points_[i] - text_size.width,
+                          center_.y + text_size.height / 2),
+                font, 1, kPointsColors[i].second, 3);
+  }
+}
