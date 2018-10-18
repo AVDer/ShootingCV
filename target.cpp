@@ -16,6 +16,7 @@ ShootError Target::load(const std::string& filename) {
 }
 
 ShootError Target::set(cv::Mat& frame) {
+  cv::resize(frame, frame, cv::Size(0, 1080));
   original_ = frame.clone();
   marked_ = frame;
   width_ = marked_.cols;

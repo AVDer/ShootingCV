@@ -3,6 +3,8 @@ import QtQuick.Layouts 1.11
 import QtQuick.Controls 1.4
 
 RowLayout {
+    id: qmlRoot
+    signal recognizeTarget();
     anchors.fill: parent
     ColumnLayout {
 
@@ -57,6 +59,17 @@ RowLayout {
     ColumnLayout {
 
         GroupBox {
+            id: controlGroupBox
+            title: "Control"
+
+            Button {
+                id: recognizeButton
+                text: "Recognize"
+                onClicked: qmlRoot.recognizeTarget()
+            }
+        }
+
+        GroupBox {
             title: "Frame source"
             ExclusiveGroup { id: frameSourceGroup }
             Layout.fillHeight: true
@@ -71,7 +84,6 @@ RowLayout {
                     onClicked: frameImage.currentImage = sourceURL
                 }
             }
-
         }
 
     }
