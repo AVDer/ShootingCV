@@ -1,0 +1,9 @@
+#targetCanvas {
+    width: 80%;
+    height: auto;
+    border: 1px solid;
+}
+
+#targetDiv {
+    border: 1px solid red;
+}

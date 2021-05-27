@@ -1,0 +1,17 @@
+{
+  "name": "targetjsclient",
+  "version": "1.0.0",
+  "description": "NodeJS client for target",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrii Derevianko",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "websocket": "^1.0.34",
+    "ws": "^7.4.4"
+  }
+}
