@@ -44,6 +44,8 @@ environment.inc
 .settings
 .idea
 .vscode
+.spyproject
+__pycache__
 
 # Built files
 Makefile
@@ -53,3 +55,7 @@ Obj/
 *debug*
 *.exe
 ShootingCV
+
+# Test files
+*.png
+*.jpg
