@@ -1,0 +1,11 @@
+name: opencv_target
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.11
+  - matplotlib
+  - numpy
+  - pandas
+  - opencv
+  - protobuf
+  - grpcio-tools

@@ -1,6 +1,4 @@
-
 import cv2
-
 
 class TargetProvider:
     
@@ -18,16 +16,19 @@ class ImageTargetProvider(TargetProvider):
     
     def get_frame(self, scale_size_y=0):
         frame = cv2.imread(self.url_, cv2.IMREAD_COLOR)
-        return cv2.resize(frame, (600, 800))
+        #return cv2.resize(frame, (600, 800))
+        return frame
 
 
 class VideoTargetProvider(TargetProvider):
 
     def __init__(self, url):
         super().__init__(url)
-        self.cap_ = cv2.VideoCapture(1)
+        self.cap_ = cv2.VideoCapture(0)
         if not self.cap_.isOpened():
             print("Cannot open camera")
+        self.cap_.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
+        self.cap_.set(cv2.CAP_PROP_EXPOSURE, -30)
 
     def __del__(self):
         self.cap_.release()
@@ -40,4 +41,5 @@ class VideoTargetProvider(TargetProvider):
         if not ret:
             print("Can't receive frame")
             return None
-        return cv2.resize(frame, (600, 800))
+        #return cv2.resize(frame, (600, 800))
+        return frame
