@@ -59,3 +59,11 @@ ShootingCV
 # Test files
 *.png
 *.jpg
+
+# Acrhives
+*.zip
+
+# Protobuf / gRPC gereted files
+*_pb2.py
+*_pb2.pyi
+*_pb2_grpc.py

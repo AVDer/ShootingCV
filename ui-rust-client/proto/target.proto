@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package target;
+
+message Empty {}
+
+message Position {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+service Target {
+  rpc GetPosition(Empty) returns (Position) {}
+  rpc SetPosition(Position) returns (Empty) {}
+  rpc StreamPosition(Empty) returns (stream Position);
+}
