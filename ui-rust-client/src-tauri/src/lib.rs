@@ -5,44 +5,44 @@ pub mod target_mod {
 use target_mod::target_client::TargetClient;
 use target_mod::Empty;
 
-use tonic::transport::Channel;
 use tauri::State;
+use tonic::transport::Channel;
 
-struct GrpcClient(TargetClient<Channel>);
-
-
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+struct GrpcClient(Option<TargetClient<Channel>>);
 
 #[tauri::command]
 async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
-
     println!("We are called!");
 
-    let mut grpc_client = client.0.clone();
-    let response = grpc_client
-        .get_position(Empty{})
-        .await
-        .map_err(|e| e.to_string())?;
+    let grpc_client = client.0.clone();
 
-    let r = response.into_inner();
+    match grpc_client {
+        Some(client) => {
+            let response = client
+                .clone()
+                .get_position(Empty {})
+                .await
+                .map_err(|e| e.to_string())?;
 
-    Ok(format!("x = {}, y = {}", r.x, r.y))
+            let r = response.into_inner();
+            Ok(format!("x = {}, y = {}", r.x, r.y))
+        }
+
+        None => Ok(format!("{} {}", 42, 27)),
+    }
 }
-
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-
-let grpc_client = tauri::async_runtime::block_on(async {
-        TargetClient::connect("http://192.168.1.160:50051")
-        .await
-        .unwrap()
-    });
-
+    let grpc_client = match tauri::async_runtime::block_on(async {
+        TargetClient::connect("http://192.168.1.160:50051").await
+    }) {
+        Ok(c) => Some(c),
+        Err(e) => {
+            println!("ERROR: Oops. Connection not possible: {}", e.to_string());
+            None
+        }
+    };
 
     tauri::Builder::default()
         .manage(GrpcClient(grpc_client))
@@ -52,17 +52,3 @@ let grpc_client = tauri::async_runtime::block_on(async {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-
-/*
-pub fn main() {
-    // Preload async resources before Tauri starts
-
-
-    tauri::Builder::default()
-        .manage(GrpcClient(grpc_client))
-        .invoke_handler(tauri::generate_handler![fetch_data])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
-}
-
-*/
