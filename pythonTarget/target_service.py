@@ -15,6 +15,10 @@ class TargetService(target_pb2_grpc.TargetServicer):
         self._x = position.x
         self._y = position.y
         return target_pb2.Empty()
+    
+    def set_point(self, point):
+        self._x = point[0]
+        self._y = point[1]
 
     def GetPosition(self, empty, target):
         return target_pb2.Position(x = self._x, y = self._y)

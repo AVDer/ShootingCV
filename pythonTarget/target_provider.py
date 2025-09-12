@@ -13,6 +13,9 @@ class TargetProvider:
     
     
 class ImageTargetProvider(TargetProvider):
+
+    def __init__(self, url):
+        super().__init__(url)
     
     def get_frame(self, scale_size_y=0):
         frame = cv2.imread(self.url_, cv2.IMREAD_COLOR)
