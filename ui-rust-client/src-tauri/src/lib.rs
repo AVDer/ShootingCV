@@ -25,6 +25,9 @@ async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
                 .map_err(|e| e.to_string())?;
 
             let r = response.into_inner();
+
+            println!("x = {}, y = {}", r.x, r.y);
+
             Ok(format!("x = {}, y = {}", r.x, r.y))
         }
 
@@ -47,7 +50,6 @@ pub fn run() {
     tauri::Builder::default()
         .manage(GrpcClient(grpc_client))
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
         .invoke_handler(tauri::generate_handler![get_position])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
