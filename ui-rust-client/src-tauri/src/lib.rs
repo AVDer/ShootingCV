@@ -8,11 +8,13 @@ use target_mod::Empty;
 use tauri::State;
 use tonic::transport::Channel;
 
+use log::{error, info, trace};
+
 struct GrpcClient(Option<TargetClient<Channel>>);
 
 #[tauri::command]
 async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
-    println!("We are called!");
+    trace!("get_position function call");
 
     let grpc_client = client.0.clone();
 
@@ -26,7 +28,7 @@ async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
 
             let r = response.into_inner();
 
-            println!("x = {}, y = {}", r.x, r.y);
+            trace!("x = {}, y = {}", r.x, r.y);
 
             Ok(format!("x = {}, y = {}", r.x, r.y))
         }
@@ -40,9 +42,12 @@ pub fn run() {
     let grpc_client = match tauri::async_runtime::block_on(async {
         TargetClient::connect("http://192.168.1.160:50051").await
     }) {
-        Ok(c) => Some(c),
+        Ok(c) => {
+            info!("Successfully connected to the server");
+            Some(c)
+        }
         Err(e) => {
-            println!("ERROR: Oops. Connection not possible: {}", e.to_string());
+            error!("Connection not possible: {}", e.to_string());
             None
         }
     };

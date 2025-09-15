@@ -19,6 +19,8 @@ tauri-build = { version = "2", features = [] }
 tonic-prost-build = "0.14"
 
 [dependencies]
+log = "0.4.28"
+env_logger = "0.11.8"
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
