@@ -3,14 +3,17 @@ import time
 
 from ray_search import get_ray_square
 from target_provider import VideoTargetProvider
+from target_provider import ImageTargetProvider
 
 from datetime import datetime
 
 class Target:
-    def __init__(self, callback):
+    def __init__(self, callback, setter):
         self._callback = callback
+        self._setter = setter
         self._running = False
-        self._frame_provider = VideoTargetProvider("")
+        # self._frame_provider = VideoTargetProvider("")
+        self._frame_provider = ImageTargetProvider("./image.png")
         self._pr = None
 
     def start(self):
@@ -24,6 +27,7 @@ class Target:
             frame = self._frame_provider.get_frame()
             dot_position = get_ray_square(frame)
             self._callback(dot_position)
+            self._setter(dot_position)
             time.sleep(1)
 
 '''

@@ -12,11 +12,14 @@ from target import Target
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     stream_manager = StreamManager()
-    target_pb2_grpc.add_TargetServicer_to_server(TargetService(stream_manager), server)
+
+    target_service = TargetService(stream_manager)
+
+    target_pb2_grpc.add_TargetServicer_to_server(target_service, server)
     server.add_insecure_port("[::]:50051")
     server.start()
 
-    detector = Target(callback=stream_manager.broadcast)
+    detector = Target(callback=stream_manager.broadcast, setter=target_service.set_point)
     detector.start()
 
     server.wait_for_termination()
