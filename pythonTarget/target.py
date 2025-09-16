@@ -13,7 +13,7 @@ class Target:
         self._setter = setter
         self._running = False
         # self._frame_provider = VideoTargetProvider("")
-        self._frame_provider = ImageTargetProvider("./image.png")
+        self._frame_provider = ImageTargetProvider("./pythonTarget/image.png")
         self._pr = None
 
     def start(self):

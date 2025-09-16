@@ -1,6 +1,8 @@
 import cv2
 
 class TargetProvider:
+
+    K_IMAGE_SIZE = 1000
     
     def __init__(self, url):
         self.url_ = url
@@ -10,6 +12,13 @@ class TargetProvider:
     
     def get_frame(self):
         pass
+
+    def reshape_frame(self, input_frame):
+        (h, w, _) = input_frame.shape
+        min_dim = min(h, w)
+        x = w / 2 - min_dim / 2
+        y = h / 2 - min_dim / 2
+        return cv2.resize(input_frame[int(y):int(y + min_dim), int(x):int(x + min_dim)], (self.K_IMAGE_SIZE, self.K_IMAGE_SIZE))
     
     
 class ImageTargetProvider(TargetProvider):
@@ -17,11 +26,9 @@ class ImageTargetProvider(TargetProvider):
     def __init__(self, url):
         super().__init__(url)
     
-    def get_frame(self, scale_size_y=0):
+    def get_frame(self):
         frame = cv2.imread(self.url_, cv2.IMREAD_COLOR)
-        #return cv2.resize(frame, (600, 800))
-        return frame
-
+        return self.reshape_frame(frame)
 
 class VideoTargetProvider(TargetProvider):
 
@@ -36,7 +43,7 @@ class VideoTargetProvider(TargetProvider):
     def __del__(self):
         self.cap_.release()
 
-    def get_frame(self, scale_size_y=0):
+    def get_frame(self):
         if not self.cap_.isOpened():
             print("Cannot open camera")
             return None
@@ -44,5 +51,4 @@ class VideoTargetProvider(TargetProvider):
         if not ret:
             print("Can't receive frame")
             return None
-        #return cv2.resize(frame, (600, 800))
-        return frame
+        return self.reshape_frame(frame)
