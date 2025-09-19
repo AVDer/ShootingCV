@@ -21,6 +21,9 @@
   <!-- Sidebar controls -->
   <div class="sidebar">
     <h3>Controls</h3>
+    <input id="serverAddrInput" type="text" minlength="7" maxlength="15" size="15"
+      pattern="^(?>(\d|[1-9]\d{2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?1)$">
+    <button id="connectBtn">Connect</button>
     <button id="addHitBtn">Add Random Hit</button>
   </div>
 

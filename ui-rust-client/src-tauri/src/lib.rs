@@ -8,19 +8,23 @@ use target_mod::Empty;
 use tauri::State;
 use tonic::transport::Channel;
 
+use std::sync::Arc;
+
 use log::{error, info, trace};
 
-struct GrpcClient(Option<TargetClient<Channel>>);
+use tokio::sync::Mutex;
+
+type GrpcClient = Arc<Mutex<Option<TargetClient<Channel>>>>;
 
 #[tauri::command]
 async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
     trace!("get_position function call");
 
-    let grpc_client = client.0.clone();
+    let grpc_client = client.lock().await;
 
-    match grpc_client {
-        Some(client) => {
-            let response = client
+    match grpc_client.as_ref() {
+        Some(c) => {
+            let response = c
                 .clone()
                 .get_position(Empty {})
                 .await
@@ -37,25 +41,37 @@ async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
     }
 }
 
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
-    let grpc_client = match tauri::async_runtime::block_on(async {
-        TargetClient::connect("http://192.168.1.160:50051").await
-    }) {
+#[tauri::command]
+async fn target_connect(client: State<'_, GrpcClient>, host: String) -> Result<(), String> {
+    trace!("connect function call");
+
+    let mut grpc_client = client.lock().await;
+
+    let server_url = format!("http://{}:50051", host);
+    info!("Connecting to: {server_url}");
+
+    match TargetClient::connect(server_url).await {
         Ok(c) => {
             info!("Successfully connected to the server");
-            Some(c)
+            *grpc_client = Some(c);
+            Ok(())
         }
         Err(e) => {
             error!("Connection not possible: {}", e.to_string());
-            None
+            *grpc_client = None;
+            Err(String::from("Connection not possible"))
         }
-    };
+    }
+}
+
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
+    let grpc_client: GrpcClient = Arc::new(Mutex::new(None));
 
     tauri::Builder::default()
-        .manage(GrpcClient(grpc_client))
+        .manage(grpc_client)
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_position])
+        .invoke_handler(tauri::generate_handler![target_connect, get_position])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

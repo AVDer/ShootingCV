@@ -3,6 +3,8 @@ const { invoke } = window.__TAURI__.core;
 let greetInputEl;
 let greetMsgEl;
 
+let targetServerIP;
+
 let targetCtx;
 let hitsCtx;
 
@@ -17,6 +19,10 @@ async function get_position() {
   const x = +coords[0];
   const y = +coords[1];
   drawHit(x, y);
+}
+
+async function target_connect() {
+  await invoke("target_connect", { host: targetServerIP.value });
 }
 
 function drawSportPistolTarget(canvasId = 'targetCanvas') {
@@ -141,6 +147,8 @@ window.addEventListener("DOMContentLoaded", () => {
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
 
+  targetServerIP = document.querySelector("#serverAddrInput");
+
   // targetCtx = document.getElementById("targetCanvas").getContext("2d");
   hitsCtx = document.getElementById("hitsCanvas").getContext("2d");
 
@@ -149,6 +157,12 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addHitBtn").addEventListener("click", () => {
     get_position();
   });
+
+  document.getElementById("connectBtn").addEventListener("click", () => {
+    target_connect();
+  });
+
+
   /*
     document.querySelector("#greet-form").addEventListener("submit", (e) => {
       e.preventDefault();
