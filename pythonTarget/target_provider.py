@@ -1,4 +1,6 @@
 import cv2
+import numpy as np
+import random
 
 class TargetProvider:
 
@@ -28,6 +30,18 @@ class ImageTargetProvider(TargetProvider):
     
     def get_frame(self):
         frame = cv2.imread(self.url_, cv2.IMREAD_COLOR)
+        return self.reshape_frame(frame)
+
+class RandomTargetProvider(TargetProvider):
+    
+    def __init__(self, url):
+        super().__init__(url)
+    
+    def get_frame(self):
+        frame = np.zeros(shape=(self.K_IMAGE_SIZE, self.K_IMAGE_SIZE, 3), dtype=np.uint8);
+        x = random.randint(0, self.K_IMAGE_SIZE - 1)
+        y = random.randint(0, self.K_IMAGE_SIZE - 1)
+        cv2.circle(frame, center=(x, y), radius=3, color=(0, 0, 255), thickness=-1)
         return self.reshape_frame(frame)
 
 class VideoTargetProvider(TargetProvider):

@@ -4,6 +4,7 @@ import time
 from ray_search import get_ray_square
 from target_provider import VideoTargetProvider
 from target_provider import ImageTargetProvider
+from target_provider import RandomTargetProvider
 
 from datetime import datetime
 
@@ -13,7 +14,8 @@ class Target:
         self._setter = setter
         self._running = False
         # self._frame_provider = VideoTargetProvider("")
-        self._frame_provider = ImageTargetProvider("./pythonTarget/image.png")
+        # self._frame_provider = ImageTargetProvider("./pythonTarget/image.png")
+        self._frame_provider = RandomTargetProvider("")
         self._pr = None
 
     def start(self):
@@ -22,13 +24,12 @@ class Target:
         self._pr.start()
 
     def _run(self):
-        print(".")
         while self._running:
             frame = self._frame_provider.get_frame()
             dot_position = get_ray_square(frame)
             self._callback(dot_position)
             self._setter(dot_position)
-            time.sleep(1)
+            #time.sleep(1)
 
 '''
 with open("output.txt", "w", encoding="utf-8") as f:
