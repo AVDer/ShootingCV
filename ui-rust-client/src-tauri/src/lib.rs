@@ -34,7 +34,7 @@ async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
 
             trace!("x = {}, y = {}", r.x, r.y);
 
-            Ok(format!("x = {}, y = {}", r.x, r.y))
+            Ok(format!("{} {}", r.x, r.y))
         }
 
         None => Ok(format!("{} {}", 42, 27)),
