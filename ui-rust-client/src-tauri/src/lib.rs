@@ -10,7 +10,7 @@ use tonic::transport::Channel;
 
 use std::sync::Arc;
 
-use log::{error, info, trace};
+use log::{debug, error, info, trace};
 
 use tokio::sync::Mutex;
 
@@ -32,7 +32,7 @@ async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
 
             let r = response.into_inner();
 
-            trace!("x = {}, y = {}", r.x, r.y);
+            debug!("x = {}, y = {}", r.x, r.y);
 
             Ok(format!("{} {}", r.x, r.y))
         }

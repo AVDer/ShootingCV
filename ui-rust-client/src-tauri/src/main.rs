@@ -7,8 +7,9 @@ fn main() {
     log::set_max_level(log::LevelFilter::Trace);
 
     Builder::new()
+        .format_timestamp_millis()
         .filter_level(log::LevelFilter::Info)
-        .filter(Some("ui_rust_client_lib"), log::LevelFilter::Trace)
+        .filter(Some("ui_rust_client_lib"), log::LevelFilter::Debug)
         .init();
 
     ui_rust_client_lib::run()

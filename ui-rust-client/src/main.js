@@ -1,17 +1,10 @@
 const { invoke } = window.__TAURI__.core;
 
-let greetInputEl;
-let greetMsgEl;
-
 let targetServerIP;
+let intervalId = null;
 
 let targetCtx;
 let hitsCtx;
-
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  greetMsgEl.textContent = await invoke("greet", { name: greetInputEl.value });
-}
 
 async function get_position() {
   const text_position = await invoke("get_position");
@@ -23,6 +16,19 @@ async function get_position() {
 
 async function target_connect() {
   await invoke("target_connect", { host: targetServerIP.value });
+}
+
+async function start_stream() {
+  if (intervalId === null) {
+    intervalId = setInterval(get_position, 32);
+  }
+}
+
+async function stop_stream() {
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
 }
 
 function drawSportPistolTarget(canvasId = 'targetCanvas') {
@@ -144,12 +150,9 @@ function drawHit(x, y) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  greetInputEl = document.querySelector("#greet-input");
-  greetMsgEl = document.querySelector("#greet-msg");
 
   targetServerIP = document.querySelector("#serverAddrInput");
 
-  // targetCtx = document.getElementById("targetCanvas").getContext("2d");
   hitsCtx = document.getElementById("hitsCanvas").getContext("2d");
 
   drawSportPistolTarget("targetCanvas");
@@ -162,11 +165,12 @@ window.addEventListener("DOMContentLoaded", () => {
     target_connect();
   });
 
+  document.getElementById("startBtn").addEventListener("click", () => {
+    start_stream();
+  });
 
-  /*
-    document.querySelector("#greet-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      get_position();
-    });
-    */
+  document.getElementById("stopBtn").addEventListener("click", () => {
+    stop_stream();
+  });
+
 });
