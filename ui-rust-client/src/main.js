@@ -6,6 +6,9 @@ let intervalId = null;
 let targetCtx;
 let hitsCtx;
 
+let old_x = -1;
+let old_y = -1;
+
 async function get_position() {
   const text_position = await invoke("get_position");
   const coords = text_position.split(" ");
@@ -19,8 +22,9 @@ async function target_connect() {
 }
 
 async function start_stream() {
+  drawHit(-1, -1);
   if (intervalId === null) {
-    intervalId = setInterval(get_position, 32);
+    intervalId = setInterval(get_position, 16);
   }
 }
 
@@ -143,10 +147,25 @@ function drawSportPistolTarget(canvasId = 'targetCanvas') {
 }
 
 function drawHit(x, y) {
+  if (x === -1 || y === -1) {
+    hitsCtx.clearRect(0, 0, 1000, 1000);
+    hitsCtx.beginPath();
+  }
+  else if (old_x !== -1 && old_y !== -1) {
+    hitsCtx.moveTo(old_x, old_y);
+    hitsCtx.lineTo(x, y);
+    hitsCtx.lineWidth = 2;
+    hitsCtx.strokeStyle = "red";
+    hitsCtx.stroke();
+  }
+  old_x = x;
+  old_y = y;
+  /*
   hitsCtx.fillStyle = "red";
   hitsCtx.beginPath();
   hitsCtx.arc(x, y, 6, 0, Math.PI * 2);
   hitsCtx.fill();
+  */
 }
 
 window.addEventListener("DOMContentLoaded", () => {
