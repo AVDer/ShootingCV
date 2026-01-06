@@ -6,6 +6,9 @@ let intervalId = null;
 let targetCtx;
 let hitsCtx;
 
+let imageEl;
+let readBtn;
+
 let old_x = -1;
 let old_y = -1;
 
@@ -168,11 +171,18 @@ function drawHit(x, y) {
   */
 }
 
+function getSelectedImageType() {
+  return document.querySelector('input[name="imageView"]:checked').value;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
 
   targetServerIP = document.querySelector("#serverAddrInput");
 
   hitsCtx = document.getElementById("hitsCanvas").getContext("2d");
+
+  imageEl = document.getElementById("calibrationImage");
+  readBtn = document.getElementById("readImageBtn");
 
   drawSportPistolTarget("targetCanvas");
 
@@ -192,4 +202,31 @@ window.addEventListener("DOMContentLoaded", () => {
     stop_stream();
   });
 
+  // Tab switching
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+      btn.classList.add("active");
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  readBtn.addEventListener("click", async () => {
+    const imageType = getSelectedImageType();
+
+    try {
+      const result = await invoke("read_calibration_image", { imageType });
+
+      imageEl.src = `data:${result.mime_type};base64,${result.base64}`;
+    } catch (e) {
+      console.error("Image load failed", e);
+    }
+  });
+
+
+
 });
+
+

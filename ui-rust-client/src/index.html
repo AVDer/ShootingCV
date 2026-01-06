@@ -10,26 +10,68 @@
 </head>
 
 <body>
-  <!-- Main target area -->
-  <div class="main">
-    <div class="target-container">
-      <canvas id="targetCanvas" width="1000" height="1000"></canvas>
-      <canvas id="hitsCanvas" width="1000" height="1000"></canvas>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="practice">Target Practice</button>
+    <button class="tab-btn" data-tab="calibration">Calibration</button>
+  </div>
+
+  <!-- TAB: Target Practice -->
+  <div class="tab-content active" id="practice">
+    <div class="main">
+      <div class="target-container">
+        <canvas id="targetCanvas" width="1000" height="1000"></canvas>
+        <canvas id="hitsCanvas" width="1000" height="1000"></canvas>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <h3>Controls</h3>
+      <input id="serverAddrInput" type="text" minlength="7" maxlength="15" size="15"
+        pattern="^((25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)$">
+      <button id="connectBtn">Connect</button>
+      <button id="addHitBtn">Single hit</button>
+      <hr>
+      <button id="startBtn">Start</button>
+      <button id="stopBtn">Stop</button>
     </div>
   </div>
 
-  <!-- Sidebar controls -->
-  <div class="sidebar">
-    <h3>Controls</h3>
-    <input id="serverAddrInput" type="text" minlength="7" maxlength="15" size="15"
-      pattern="^((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$">
-    <button id="connectBtn">Connect</button>
-    <button id="addHitBtn">Single hit</button>
-    <hr>
-    <button id="startBtn">Start</button>
-    <button id="stopBtn">Stop</button>
-  </div>
+  <!-- TAB: Calibration -->
+  <div class="tab-content" id="calibration">
+    <div class="calibration-container">
 
+      <!-- Image selector -->
+      <div class="image-selector">
+        <label>
+          <input type="radio" name="imageView" value="original" checked>
+          Original
+        </label>
+        <label>
+          <input type="radio" name="imageView" value="transformed">
+          Transformed
+        </label>
+        <label>
+          <input type="radio" name="imageView" value="marked">
+          Marked
+        </label>
+      </div>
+
+      <!-- Image preview -->
+      <div class="image-preview">
+        <img id="calibrationImage" alt="Calibration" />
+      </div>
+
+      <!-- Controls -->
+      <div class="calibration-controls">
+        <input type="file" id="imageInput" accept="image/*" hidden>
+        <button id="readImageBtn">Read image</button>
+        <button id="calibrateBtn">Calibrate</button>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 

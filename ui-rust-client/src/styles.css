@@ -1,51 +1,113 @@
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      display: flex;
-      height: 100vh;
-    }
+body {
+  margin: 0;
+  font-family: sans-serif;
+  display: flex;
+  height: 100vh;
+}
 
-    /* Layout */
-    .main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #f0f0f0;
-    }
+/* Layout */
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f0f0;
+}
 
-    .sidebar {
-      width: 200px;
-      padding: 16px;
-      border-left: 2px solid #ccc;
-      background: #fafafa;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+.sidebar {
+  width: 200px;
+  padding: 16px;
+  border-left: 2px solid #ccc;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-    /* Target area */
-    .target-container {
-      position: relative;
-      width: 1000px;
-      height: 1000px;
-    }
+/* Target area */
+.target-container {
+  position: relative;
+  width: 1000px;
+  height: 1000px;
+}
 
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
-    button {
-      padding: 8px;
-      border: none;
-      border-radius: 6px;
-      background: steelblue;
-      color: white;
-      cursor: pointer;
-    }
+button {
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: steelblue;
+  color: white;
+  cursor: pointer;
+}
 
-    button:hover {
-      background: royalblue;
-    }
+button:hover {
+  background: royalblue;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background: #fff;
+  border-bottom: 2px solid #007acc;
+  font-weight: bold;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: flex;
+}
+
+/* Calibration layout */
+.calibration-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.image-preview {
+  width: 100%;
+  height: 600px;
+  border: 2px dashed #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.calibration-controls button {
+  margin-right: 10px;
+}
+
+.image-selector {
+  margin-bottom: 10px;
+}
+
+.image-selector label {
+  margin-right: 20px;
+  cursor: pointer;
+  font-weight: 500;
+}

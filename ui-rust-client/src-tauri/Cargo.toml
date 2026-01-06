@@ -19,6 +19,7 @@ tauri-build = { version = "2", features = [] }
 tonic-prost-build = "0.14"
 
 [dependencies]
+base64 = "0.22.1"
 log = "0.4.28"
 env_logger = "0.11.8"
 tauri = { version = "2", features = [] }

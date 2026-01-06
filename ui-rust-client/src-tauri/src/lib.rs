@@ -4,6 +4,8 @@ pub mod target_mod {
 
 use target_mod::target_client::TargetClient;
 use target_mod::Empty;
+use target_mod::GetImageRequest;
+use target_mod::ImageType;
 
 use tauri::State;
 use tonic::transport::Channel;
@@ -14,7 +16,16 @@ use log::{debug, error, info, trace};
 
 use tokio::sync::Mutex;
 
+use base64::engine::general_purpose::STANDARD;
+use base64::Engine;
+
 type GrpcClient = Arc<Mutex<Option<TargetClient<Channel>>>>;
+
+#[derive(serde::Serialize)]
+struct ImageResponse {
+    base64: String,
+    mime_type: String,
+}
 
 #[tauri::command]
 async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
@@ -39,6 +50,49 @@ async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
 
         None => Ok(format!("{} {}", 42, 27)),
     }
+}
+
+fn map_image_type(image_type: &str) -> Result<ImageType, String> {
+    match image_type {
+        "original" => Ok(ImageType::Original),
+        "transformed" => Ok(ImageType::Transform),
+        "marked" => Ok(ImageType::Mark),
+        _ => Err(format!("Unknown image type: {}", image_type)),
+    }
+}
+
+#[tauri::command]
+async fn read_calibration_image(
+    client: State<'_, GrpcClient>,
+    image_type: String,
+) -> Result<ImageResponse, String> {
+    // image_type will be: "original", "transformed", or "marked"
+    debug!("Requested image type: {}", image_type);
+
+    let image_type = map_image_type(&image_type)?;
+
+    let image_request = tonic::Request::new(GetImageRequest {
+        image_type: image_type as i32,
+    });
+
+    let grpc_client = client.lock().await;
+
+    let image_response = grpc_client
+        .as_ref()
+        .unwrap()
+        .clone()
+        .get_image(image_request)
+        .await
+        .map_err(|e| e.to_string())?
+        .into_inner();
+
+    // Encode bytes to Base64
+    let base64_data = STANDARD.encode(&image_response.image_data);
+
+    Ok(ImageResponse {
+        base64: base64_data,
+        mime_type: image_response.mime_type,
+    })
 }
 
 #[tauri::command]
@@ -71,7 +125,11 @@ pub fn run() {
     tauri::Builder::default()
         .manage(grpc_client)
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![target_connect, get_position])
+        .invoke_handler(tauri::generate_handler![
+            target_connect,
+            get_position,
+            read_calibration_image,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
