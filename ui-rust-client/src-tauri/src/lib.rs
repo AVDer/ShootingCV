@@ -52,6 +52,26 @@ async fn get_position(client: State<'_, GrpcClient>) -> Result<String, String> {
     }
 }
 
+#[tauri::command]
+async fn calibrate_target(client: State<'_, GrpcClient>) -> Result<(), String> {
+    trace!("calibrate_target function call");
+
+    let grpc_client = client.lock().await;
+
+    match grpc_client.as_ref() {
+        Some(c) => {
+            let _ = c
+                .clone()
+                .adjust_image(Empty {})
+                .await
+                .map_err(|e| e.to_string())?;
+            Ok(())
+        }
+
+        None => Ok(()),
+    }
+}
+
 fn map_image_type(image_type: &str) -> Result<ImageType, String> {
     match image_type {
         "original" => Ok(ImageType::Original),
@@ -129,6 +149,7 @@ pub fn run() {
             target_connect,
             get_position,
             read_calibration_image,
+            calibrate_target,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

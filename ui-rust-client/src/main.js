@@ -23,6 +23,9 @@ async function get_position() {
 async function target_connect() {
   await invoke("target_connect", { host: targetServerIP.value });
 }
+async function target_calibrate() {
+  await invoke("calibrate_target");
+}
 
 async function start_stream() {
   drawHit(-1, -1);
@@ -192,6 +195,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("connectBtn").addEventListener("click", () => {
     target_connect();
+  });
+
+  document.getElementById("calibrateBtn").addEventListener("click", () => {
+    target_calibrate();
   });
 
   document.getElementById("startBtn").addEventListener("click", () => {
