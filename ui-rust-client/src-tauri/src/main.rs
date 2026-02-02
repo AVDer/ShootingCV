@@ -8,7 +8,7 @@ fn main() {
 
     Builder::new()
         .format_timestamp_millis()
-        .filter_level(log::LevelFilter::Info)
+        .filter_level(log::LevelFilter::Debug)
         .filter(Some("ui_rust_client_lib"), log::LevelFilter::Debug)
         .init();
 

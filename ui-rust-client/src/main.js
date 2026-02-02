@@ -153,15 +153,15 @@ function drawSportPistolTarget(canvasId = 'targetCanvas') {
 }
 
 function drawHit(x, y) {
-  if (x === -1 || y === -1) {
-    hitsCtx.clearRect(0, 0, 1000, 1000);
-    hitsCtx.beginPath();
-  }
-  else if (old_x !== -1 && old_y !== -1) {
-    hitsCtx.moveTo(old_x, old_y);
+  if (x !== -1 || y !== -1) {
+    if (old_x === -1 && old_y === -1) {
+      hitsCtx.clearRect(0, 0, 1000, 1000);
+      hitsCtx.beginPath();
+      hitsCtx.moveTo(x, y);
+      hitsCtx.lineWidth = 2;
+      hitsCtx.strokeStyle = "red";
+    }
     hitsCtx.lineTo(x, y);
-    hitsCtx.lineWidth = 2;
-    hitsCtx.strokeStyle = "red";
     hitsCtx.stroke();
   }
   old_x = x;
